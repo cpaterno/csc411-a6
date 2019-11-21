@@ -44,8 +44,8 @@ Array_T load_prog(FILE *fp) {
             endian_switch(buf, size);
             memcpy(elem, buf, size);
         }
-        // Remove extra space
-        Array_resize(instruct, i);
     }
+    // Remove extra space
+    Array_resize(instruct, i);
     return instruct;
 }
