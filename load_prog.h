@@ -8,5 +8,4 @@
 
 // given a file pointer return an Array_T of instruction words
 extern Array_T load_prog(FILE *fp);
-
 #endif

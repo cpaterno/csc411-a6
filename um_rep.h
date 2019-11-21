@@ -2,12 +2,11 @@
 #define __UM_REP__
 
 // This module exports all the shared secrets that each UM module needs
-
 #include <stdint.h>
 #include "seq.h"
 
 // The first secret is that each umword is actually a uint32_t
-typedef uint32_t umword;
+#define umword uint32_t 
 
 // The second secret is the representation of a segmented memory, 
 // which is represented as a struct SegMem_T 
