@@ -1,6 +1,5 @@
 #include "um_parser.h"
 
-
 #define OP_WIDTH 4
 #define REG_WIDTH 3
 #define VAL_WIDTH 25
