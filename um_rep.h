@@ -7,6 +7,7 @@
 
 // The first secret is that each umword is actually a uint32_t
 #define umword uint32_t 
+#define NUM_REGS 8
 
 // The second secret is the representation of a segmented memory, 
 // which is represented as a struct SegMem_T 
@@ -24,8 +25,8 @@ typedef struct SegMem_T {
 // This data structure is exported as a pointer 
 // to follow Hanson's interface formula
 typedef struct UM_T {
-    // pointer to array of registers
-    umword *regs;
+    // array of registers
+    umword regs[NUM_REGS];
     // index of current instruction
     umword prog_count;
     // um segemented memory
