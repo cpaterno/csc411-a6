@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 #include "assert.h"
 #include "mem.h"
@@ -5,6 +6,14 @@
 #include "um_parser.h"
 #include "um_instructions.h"
 #include "um_mem.h"
+
+// I don't feel like defining 14 constants
+enum instruction {
+    CMOV, SEG_LOAD, SEG_STORE, ADD, 
+    MUL, DIV, NAND, HALT, MAP, UNMAP,
+    OUT, IN, LOAD_PROG, LOAD_VAL
+};
+
 
 // initialize a UM with a program
 UM_T UM_init(Array_T prog) {
@@ -21,7 +30,62 @@ UM_T UM_init(Array_T prog) {
 
 // run an intialized Universal machine
 void UM_run(UM_T um) {
-    (void)um;
+    bool ok = true;
+    umword *instp = 0;
+    umword op = 0;
+    Array_T prog = NULL; 
+    // run the machine
+    while (true) {
+        // load program's segment
+        prog = (Array_T)Seq_get(um->memory.mem, 0);
+        // get current word
+        instp = (umword *)Array_get(prog, um->prog_count);
+        // get opcode
+        op = opcode(*instp);
+        // parse opcode
+        switch (op) {
+            case CMOV:
+                break;
+            case SEG_LOAD:
+                break;
+            case SEG_STORE:
+                break;
+            case ADD:
+                break;
+            case MUL:
+                break;
+            case DIV:
+                break;
+            case NAND:
+                break;
+            // successfully exit the machine
+            case HALT:
+                UM_free(&um);
+                exit(EXIT_SUCCESS);
+                break;
+            case MAP:
+                break;
+            case UNMAP:
+                break;
+            case OUT:
+                break;
+            case IN:
+                break;
+            case LOAD_PROG:
+                break;
+            case LOAD_VAL:
+                break;
+            // invalid opcode
+            default:
+                ok = false;
+        }
+        // instruction raised an error
+        assert(ok);
+        // move program counter
+        ++(um->prog_count);
+        // if this fails, out of instructions
+        assert(um->prog_count < (umword)Array_length(prog));
+    }
 }
 
 // cleanup the UM's resources
