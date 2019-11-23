@@ -43,18 +43,28 @@ void UM_run(UM_T um) {
         // parse opcode
         switch (op) {
             case CMOV:
+                cmov(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             case SEG_LOAD:
+                seg_load(um, a_three(*instp), 
+                         b_three(*instp), c_three(*instp));
                 break;
             case SEG_STORE:
+                seg_store(um, a_three(*instp), 
+                          b_three(*instp), c_three(*instp));
                 break;
             case ADD:
+                add(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             case MUL:
+                multiply(um, a_three(*instp), 
+                         b_three(*instp), c_three(*instp));
                 break;
             case DIV:
+                divide(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             case NAND:
+                nand(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             // successfully exit the machine
             case HALT:
@@ -62,23 +72,27 @@ void UM_run(UM_T um) {
                 exit(EXIT_SUCCESS);
                 break;
             case MAP:
+                map(um, b_three(*instp), c_three(*instp));
                 break;
             case UNMAP:
+                unmap(um, c_three(*instp));
                 break;
             case OUT:
+                output(um, c_three(*instp));
                 break;
             case IN:
+                input(um, c_three(*instp));
                 break;
             case LOAD_PROG:
+                load_prog(um, b_three(*instp), c_three(*instp));
                 break;
             case LOAD_VAL:
+                load_val(um, a_other(*instp), val_other(*instp));
                 break;
             // invalid opcode
             default:
-                assert(0);
+                exit(EXIT_FAILURE);
         }
-        // move program counter
-        ++(um->prog_count);
         // if this fails, out of instructions
         assert(um->prog_count < (umword)Array_length(prog));
     }
