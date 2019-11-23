@@ -4,6 +4,7 @@
 // This module exports all the shared secrets that each UM module needs
 #include <stdint.h>
 #include "seq.h"
+#include "stack.h"
 
 // The first secret is that each umword is actually a uint32_t
 #define umword uint32_t 
@@ -16,8 +17,8 @@
 typedef struct SegMem_T {
     // sequence of memory segments
     Seq_T mem;
-    // number of holes
-    umword hole_count;
+    // indices of the holes in the sequence
+    Stack_T hole_idxs;
 } *SegMem_T;
 
 // The third secret is our representation of the Universal Machine, 

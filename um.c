@@ -21,6 +21,7 @@ UM_T UM_init(Array_T prog) {
     NEW0(um);
     um->memory.mem = Seq_new(0);
     Seq_addhi(um->memory.mem, prog);
+    um->memory.hole_idxs = Stack_new();
     return um;
 }
 
@@ -110,6 +111,15 @@ void UM_free(UM_T *ump) {
     }
     // free the sequence itself
     Seq_free(&s);
+    // alias for the UM's stack
+    Stack_T h = (*ump)->memory.hole_idxs;
+    void *idx = NULL;
+    while (!Stack_empty(h)) {
+        idx = Stack_pop(h);
+        FREE(idx);
+    }
+    // free the stack itself
+    Stack_free(&h);
     // free the UM struct
     FREE(*ump);
 }
