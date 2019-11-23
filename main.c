@@ -1,6 +1,5 @@
-#include <stdio.h>
 #include "assert.h"
-#include "load_prog.h"
+#include "loader.h"
 #include "um.h"
 
 int main(int argc, char *argv[]) {
@@ -9,7 +8,7 @@ int main(int argc, char *argv[]) {
     FILE *instream = fopen(argv[1], "rb");
     assert(instream);
     // load program
-    Array_T instruct = load_prog(instream);
+    Array_T instruct = loader(instream);
     // cleanup file pointer
     fclose(instream);
     // init um

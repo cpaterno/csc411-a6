@@ -5,7 +5,6 @@
 #include "um.h"
 #include "um_parser.h"
 #include "um_instructions.h"
-#include "um_mem.h"
 
 // I don't feel like defining 14 constants
 enum instruction {
@@ -30,12 +29,11 @@ UM_T UM_init(Array_T prog) {
 
 // run an intialized Universal machine
 void UM_run(UM_T um) {
-    bool ok = true;
     umword *instp = 0;
     umword op = 0;
     Array_T prog = NULL; 
     // run the machine
-    while (true) {
+    while (1) {
         // load program's segment
         prog = (Array_T)Seq_get(um->memory.mem, 0);
         // get current word
@@ -77,10 +75,8 @@ void UM_run(UM_T um) {
                 break;
             // invalid opcode
             default:
-                ok = false;
+                assert(0);
         }
-        // instruction raised an error
-        assert(ok);
         // move program counter
         ++(um->prog_count);
         // if this fails, out of instructions
