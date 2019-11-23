@@ -2,6 +2,7 @@
 #include "assert.h"
 #include "array.h"
 #include "um_instructions.h"
+#include "um_mem.h"
 
 // make sure reg index is in bounds
 static inline void ok_reg(umword r) {
@@ -99,17 +100,20 @@ void nand(UM_T um, umword a, umword b, umword c) {
 // map a new segment of memory with equal to whats in register c and store
 // the segment ID in register b
 void map(UM_T um, umword b, umword c) {
-    (void)um;
-    (void)b;
-    (void)c;
+    assert(um);
+    ok_reg(b);
+    ok_reg(c);
+    um->regs[b] = allocate(&(um->memory), um->regs[c]);
     // move program counter
     ++(um->prog_count);    
 }
 
 // unmap a segment of memory with its segment ID in register c
 void unmap(UM_T um, umword c) {
-    (void)um;
-    (void)c;
+    assert(um);
+    ok_reg(c);
+    assert(um->regs[c]);
+    deallocate(&(um->memory), um->regs[c]);
     // move program counter
     ++(um->prog_count);    
 }
