@@ -2,7 +2,7 @@
 #include "mem.h"
 #include "assert.h"
 #include "um_rep.h"
-#include "load_prog.h"
+#include "loader.h"
 
 // Unfortunately I am on a little endian machine, so this is necessary
 static inline void endian_switch(uint8_t *buf, unsigned len) {
@@ -16,7 +16,7 @@ static inline void endian_switch(uint8_t *buf, unsigned len) {
 }
 
 // given a file pointer return an Array_T of instruction words
-Array_T load_prog(FILE *fp) {
+Array_T loader(FILE *fp) {
     assert(fp);
     Array_T instruct = Array_new(0, sizeof(umword));
     int size = Array_size(instruct);

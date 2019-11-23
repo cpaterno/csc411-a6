@@ -5,7 +5,6 @@
 #include "um.h"
 #include "um_parser.h"
 #include "um_instructions.h"
-#include "um_mem.h"
 
 // I don't feel like defining 14 constants
 enum instruction {
@@ -30,12 +29,11 @@ UM_T UM_init(Array_T prog) {
 
 // run an intialized Universal machine
 void UM_run(UM_T um) {
-    bool ok = true;
     umword *instp = 0;
     umword op = 0;
     Array_T prog = NULL; 
     // run the machine
-    while (true) {
+    while (1) {
         // load program's segment
         prog = (Array_T)Seq_get(um->memory.mem, 0);
         // get current word
@@ -45,18 +43,28 @@ void UM_run(UM_T um) {
         // parse opcode
         switch (op) {
             case CMOV:
+                cmov(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             case SEG_LOAD:
+                seg_load(um, a_three(*instp), 
+                         b_three(*instp), c_three(*instp));
                 break;
             case SEG_STORE:
+                seg_store(um, a_three(*instp), 
+                          b_three(*instp), c_three(*instp));
                 break;
             case ADD:
+                add(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             case MUL:
+                multiply(um, a_three(*instp), 
+                         b_three(*instp), c_three(*instp));
                 break;
             case DIV:
+                divide(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             case NAND:
+                nand(um, a_three(*instp), b_three(*instp), c_three(*instp));
                 break;
             // successfully exit the machine
             case HALT:
@@ -64,25 +72,27 @@ void UM_run(UM_T um) {
                 exit(EXIT_SUCCESS);
                 break;
             case MAP:
+                map(um, b_three(*instp), c_three(*instp));
                 break;
             case UNMAP:
+                unmap(um, c_three(*instp));
                 break;
             case OUT:
+                output(um, c_three(*instp));
                 break;
             case IN:
+                input(um, c_three(*instp));
                 break;
             case LOAD_PROG:
+                load_prog(um, b_three(*instp), c_three(*instp));
                 break;
             case LOAD_VAL:
+                load_val(um, a_other(*instp), val_other(*instp));
                 break;
             // invalid opcode
             default:
-                ok = false;
+                exit(EXIT_FAILURE);
         }
-        // instruction raised an error
-        assert(ok);
-        // move program counter
-        ++(um->prog_count);
         // if this fails, out of instructions
         assert(um->prog_count < (umword)Array_length(prog));
     }
