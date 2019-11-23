@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <string.h>
 #include "assert.h"
 #include "mem.h"
 #include "um.h"
@@ -18,11 +17,9 @@ enum instruction {
 UM_T UM_init(Array_T prog) {
     assert(prog);
     UM_T um;
-    NEW(um);
-    memset(um->regs, 0, NUM_REGS * sizeof(umword));
-    um->prog_count = 0;
+    // Calloc all parts of the struct
+    NEW0(um);
     um->memory.mem = Seq_new(0);
-    um->memory.hole_count = 0;
     Seq_addhi(um->memory.mem, prog);
     return um;
 }
