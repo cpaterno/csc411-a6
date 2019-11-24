@@ -147,7 +147,9 @@ void load_prog(UM_T um, umword b, umword c) {
     ok_reg(c);
     if (um->regs[b]) {
         Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
-        assert(seg);
+        Array_T prog = (Array_T)Seq_get(um->memory.mem, 0);
+        Array_free(&prog);
+        // Array copy makes sure seg is not NULL
         Seq_put(um->memory.mem, 0, Array_copy(seg, Array_length(seg)));
     }
     um->prog_count = um->regs[c];
