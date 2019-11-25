@@ -91,8 +91,6 @@ void UM_run(UM_T um) {
             default:
                 exit(EXIT_FAILURE);
         }
-        // if this fails, out of instructions
-        assert(um->prog_count < (umword)Array_length(prog));
     }
 }
 

@@ -8,7 +8,7 @@
 umword allocate(SegMem_T pool, umword size) {
     assert(pool);
     // make sure we are not out of resources
-    assert((umword)Seq_length(pool->mem) < UINT32_MAX);
+    assert((umword)Seq_length(pool->mem) < (umword)-1);
     // no holes case
     umword idx = 0;
     if (Stack_empty(pool->hole_idxs)) {

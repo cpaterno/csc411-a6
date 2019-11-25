@@ -19,31 +19,25 @@ static inline void endian_switch(uint8_t *buf, unsigned len) {
 Array_T loader(FILE *fp) {
     assert(fp);
     Array_T instruct = Array_new(0, sizeof(umword));
-    int size = Array_size(instruct);
+    size_t size = Array_size(instruct);
     int len = Array_length(instruct);
     uint8_t buf[size];
     umword *elem = NULL;
     int i = 0;
-    int j = 0;
-    while (!feof(fp)) {
-        buf[j++] = getc(fp);
-        // buffer is full
-        if (j == size) {
-            j = 0;
-            // Array needs to be resized
-            if (i == len) {
-                if (i != 0) {
-                    len *= 2;
-                } else {
-                    len = 1;
-                }
-                Array_resize(instruct, len);
+    while (fread(buf, 1, size, fp) == size) {
+        // Array needs to be resized
+        if (i == len) {
+            if (len != 0) {
+                len *= 2;
+            } else {
+                len = 1;
             }
-            elem = (umword *)Array_get(instruct, i++);
-            assert(sizeof(*elem) == size);
-            endian_switch(buf, size);
-            memcpy(elem, buf, size);
+            Array_resize(instruct, len);
         }
+        elem = (umword *)Array_get(instruct, i++);
+        assert(sizeof(*elem) == size);
+        endian_switch(buf, size);
+        memcpy(elem, buf, size);
     }
     // Remove extra space
     Array_resize(instruct, i);
