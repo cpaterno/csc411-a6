@@ -2,7 +2,7 @@
 #include "mem.h"
 #include "assert.h"
 #include "um_rep.h"
-#include "loader.h"
+#include "um_loader.h"
 
 // Unfortunately I am on a little endian machine, so this is necessary
 static inline void endian_switch(uint8_t *buf, unsigned len) {
