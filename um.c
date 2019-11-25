@@ -12,7 +12,6 @@ enum instruction {
     OUT, IN, LOAD_PROG, LOAD_VAL
 };
 
-
 // initialize a UM with a program
 UM_T UM_init(Array_T prog) {
     assert(prog);
@@ -35,6 +34,8 @@ void UM_run(UM_T um) {
         // load program's segment
         prog = (Array_T)Seq_get(um->memory.mem, 0);
         // get current word
+        // Array_get handles the 1st Fail State: 
+        // Program Count out of bounds of $m[0]
         instp = (umword *)Array_get(prog, um->prog_count);
         // get opcode
         op = opcode(*instp);
@@ -87,7 +88,7 @@ void UM_run(UM_T um) {
             case LOAD_VAL:
                 load_val(um, a_other(*instp), val_other(*instp));
                 break;
-            // invalid opcode
+            // 2nd Fail State: Invalid Instruction (aka invalid opcode)
             default:
                 exit(EXIT_FAILURE);
         }

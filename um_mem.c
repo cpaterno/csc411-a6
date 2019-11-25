@@ -7,7 +7,9 @@
 // allocate a new segment with size and return the new segment's ID
 umword allocate(SegMem_T pool, umword size) {
     assert(pool);
-    // make sure we are not out of resources
+    // Handle 12th Fail State: Resource Exhaustion aka maximum number
+    // of segments is 2^(num bits in umword) - 1
+    // Must be a checked run-time error 
     assert((umword)Seq_length(pool->mem) < (umword)-1);
     // no holes case
     umword idx = 0;
@@ -28,6 +30,8 @@ umword allocate(SegMem_T pool, umword size) {
 void deallocate(SegMem_T pool, umword id) {
     assert(pool);
     Array_T seg = (Array_T)Seq_get(pool->mem, id);
+    // Array_free handles 8th Fail State: 
+    // attempting to unmap a segment which is not mapped
     Array_free(&seg);
     Seq_put(pool->mem, id, NULL);
     umword *idxp;
