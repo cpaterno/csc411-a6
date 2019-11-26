@@ -8,7 +8,8 @@
 umword allocate(SegMem_T pool, umword size) {
     assert(pool);
     // Handle 12th Fail State: Resource Exhaustion aka maximum number
-    // of segments is 2^(num bits in umword) - 1
+    // of segments is 2^(num bits in umword) - 1, if this is true
+    // then we can allocate memory
     // Must be a checked run-time error 
     assert((umword)Seq_length(pool->mem) < (umword)-1);
     umword idx = 0;
