@@ -8,6 +8,6 @@
 
 // allocate a new segment with size and return the new segment's ID
 extern umword allocate(SegMem_T pool, umword size);
-// deallocate a segment
+// deallocate a segment, at id
 extern void deallocate(SegMem_T pool, umword id);
 #endif

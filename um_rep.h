@@ -7,24 +7,28 @@
 #include "stack.h"
 
 // The first secret is that each umword is actually a uint32_t
-#define umword uint32_t 
+#define umword uint32_t
+// The second shared secret is that there are 8 registers
 #define NUM_REGS 8
 
-// The second secret is the representation of a segmented memory, 
+// The third shared secret is the representation of a segmented memory,
 // which is represented as a struct SegMem_T 
 // This data structure is exported as a pointer 
-// to follow Hanson's interface formula
+// to follow Hanson's interface style
 typedef struct SegMem_T {
-    // sequence of memory segments
+    // sequence of memory segments, segments are Array_Ts
+    // therefore they need to be freed
     Seq_T mem;
-    // indices of the holes in the sequence
+    // indices of the holes in the sequence,
+    // Hanson's stack is a boxed ADT, therefore the elements 
+    // of the stack need to be freed
     Stack_T hole_idxs;
 } *SegMem_T;
 
-// The third secret is our representation of the Universal Machine, 
+// The fourth shared secret is our representation of the Universal Machine, 
 // which is represented as a struct UM_T
 // This data structure is exported as a pointer 
-// to follow Hanson's interface formula
+// to follow Hanson's interface style
 typedef struct UM_T {
     // array of registers
     umword regs[NUM_REGS];
