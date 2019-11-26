@@ -3,26 +3,20 @@
 
 // This module exports six functions which extract
 // the important parts from an um instruction
-
 #include "bitpack.h"
 #include "um_rep.h"
 
 // takes word and extracts opcode
 extern umword opcode(umword word);
-
-// takes word and extracts the three register for a
+// takes word, a three register instruction, and extracts register a
 extern umword a_three(umword word);
-
-// takes word and extracts the three register for b
+// takes word, a three register instruction, and extracts register b
 extern umword b_three(umword word);
-
-// takes word and extracts the three register for c
+// takes word, a three register instruction, and extracts register c
 extern umword c_three(umword word);
-
-// takes word and extracts the other register for a
+// takes word, an ther instruction, and extracts register a
 extern umword a_other(umword word);
-
-// takes word and extracts the other register for val
+// takes word, an other instruction, and extracts value
 extern umword val_other(umword word);
 
 

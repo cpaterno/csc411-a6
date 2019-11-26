@@ -12,15 +12,17 @@ enum instruction {
     OUT, IN, LOAD_PROG, LOAD_VAL
 };
 
-
-// initialize a UM with a program
+// initialize a UM with a loaded program, prog is freed when UM is freed
 UM_T UM_init(Array_T prog) {
     assert(prog);
     UM_T um;
     // Calloc all parts of the struct
     NEW0(um);
+    // initialize segment sequence
     um->memory.mem = Seq_new(0);
+    // add loaded program
     Seq_addhi(um->memory.mem, prog);
+    // initialize stack of hole indexes
     um->memory.hole_idxs = Stack_new();
     return um;
 }
@@ -35,6 +37,8 @@ void UM_run(UM_T um) {
         // load program's segment
         prog = (Array_T)Seq_get(um->memory.mem, 0);
         // get current word
+        // Array_get handles the 1st Fail State: 
+        // Program Count out of bounds of $m[0]
         instp = (umword *)Array_get(prog, um->prog_count);
         // get opcode
         op = opcode(*instp);
@@ -87,7 +91,7 @@ void UM_run(UM_T um) {
             case LOAD_VAL:
                 load_val(um, a_other(*instp), val_other(*instp));
                 break;
-            // invalid opcode
+            // 2nd Fail State: Invalid Instruction (aka invalid opcode)
             default:
                 exit(EXIT_FAILURE);
         }
@@ -112,6 +116,7 @@ void UM_free(UM_T *ump) {
     // alias for the UM's stack
     Stack_T h = (*ump)->memory.hole_idxs;
     void *idx = NULL;
+    // free all indexes in the stack
     while (!Stack_empty(h)) {
         idx = Stack_pop(h);
         FREE(idx);

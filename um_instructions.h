@@ -25,18 +25,18 @@ extern void divide(UM_T um, umword a, umword b, umword c);
 // bitwise not and on the values in register b and c, 
 // put the result in register a 
 extern void nand(UM_T um, umword a, umword b, umword c);
-// map a new segment of memory with equal to whats in register c and store 
-// the segment ID in register b
+// map a new segment of memory with size equal to whats in register c 
+// and store the segment ID in register b
 extern void map(UM_T um, umword b, umword c);
 // unmap a segment of memory with its segment ID in register c
 extern void unmap(UM_T um, umword c);
 // output a character to the IO device, based on the value of register c
 extern void output(UM_T um, umword c);
-// input a character to register c
+// input a character, using the IO device, to register c
 extern void input(UM_T um, umword c);
 // load a new program into the 0 segment from the memory segment ID 
 // represented by the value of register b, if that value is 0 then 
-// this is a jump
+// this is a jump, change the program counter to the value in register c
 extern void load_prog(UM_T um, umword b, umword c);
 // overwrite the value in register a with value
 extern void load_val(UM_T um, umword a, umword val);

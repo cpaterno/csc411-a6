@@ -30,7 +30,10 @@ void seg_load(UM_T um, umword a, umword b, umword c) {
     ok_reg(a);
     ok_reg(b);
     ok_reg(c);
+    // Array_get handles the 5th Fail State: SegLoad accesses something 
+    // out of bounds of the memory pool or out of bounds of the segment 
     Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
+    // Array_get also handles the 3rd Fail State: SegLoad refers to unmapped (NULL)
     umword *e = (umword *)Array_get(seg, um->regs[c]);
     um->regs[a] = *e;
     // move program counter
@@ -44,7 +47,10 @@ void seg_store(UM_T um, umword a, umword b, umword c) {
     ok_reg(a);
     ok_reg(b);
     ok_reg(c);
+    // Array_get handles the 6th Fail State: SegStore accesses something 
+    // out of bounds of the memory pool or out of bounds of the segment 
     Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[a]);
+    // Array_get handles the 4th Fail State: SegStore refers to unmapped (NULL)
     umword *e = (umword *)Array_get(seg, um->regs[b]);
     *e = um->regs[c];
     // move program counter
@@ -79,6 +85,7 @@ void divide(UM_T um, umword a, umword b, umword c) {
     ok_reg(a);
     ok_reg(b);
     ok_reg(c);
+    // Handle 9th Fail State: Division by 0
     assert(um->regs[c]);
     um->regs[a] = (um->regs[b] / um->regs[c]);
     // move program counter
@@ -97,8 +104,8 @@ void nand(UM_T um, umword a, umword b, umword c) {
     ++(um->prog_count);    
 }
 
-// map a new segment of memory with equal to whats in register c and store
-// the segment ID in register b
+// map a new segment of memory with size equal to whats in register c 
+// and store the segment ID in register b
 void map(UM_T um, umword b, umword c) {
     assert(um);
     ok_reg(b);
@@ -112,6 +119,7 @@ void map(UM_T um, umword b, umword c) {
 void unmap(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
+    // 7th Fail State: Can't unmap segment 0
     assert(um->regs[c]);
     deallocate(&(um->memory), um->regs[c]);
     // move program counter
@@ -122,13 +130,14 @@ void unmap(UM_T um, umword c) {
 void output(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
+    // Handle 11th Fail State: Print invalid character
     assert(um->regs[c] < 255);
     putchar(um->regs[c]);
     // move program counter
     ++(um->prog_count);    
 }
 
-// input a character to register c
+// input a character, using the IO device, to register c
 void input(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
@@ -146,12 +155,16 @@ void load_prog(UM_T um, umword b, umword c) {
     ok_reg(b);
     ok_reg(c);
     if (um->regs[b]) {
+        // free currently loaded program
         Array_T prog = (Array_T)Seq_get(um->memory.mem, 0);
         Array_free(&prog);
+        // get new program to load into segment 0
         Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
-        // Array copy makes sure seg is not NULL
+        // Array_copy handles 10th Fail State: 
+        // Loading an unmapped segment as a program
         Seq_put(um->memory.mem, 0, Array_copy(seg, Array_length(seg)));
     }
+    // move the program counter
     um->prog_count = um->regs[c];
 }
 
