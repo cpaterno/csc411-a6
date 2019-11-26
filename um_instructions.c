@@ -131,7 +131,8 @@ void output(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
     // Handle 11th Fail State: Print invalid character
-    assert(um->regs[c] <= 255);
+    // Valid characters are [0, 255]
+    assert(um->regs[c] <= UINT8_MAX);
     putchar(um->regs[c]);
     // move program counter
     ++(um->prog_count);    
@@ -142,7 +143,8 @@ void input(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
     um->regs[c] = getchar();
-    assert(um->regs[c] <= 255 || um->regs[c] == (umword)EOF);
+    // char is between [0, 255] or EOF
+    assert(um->regs[c] <= UINT8_MAX || um->regs[c] == (umword)EOF);
     // move program counter
     ++(um->prog_count);    
 }
