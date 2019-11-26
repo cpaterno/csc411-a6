@@ -131,7 +131,7 @@ void output(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
     // Handle 11th Fail State: Print invalid character
-    assert(um->regs[c] < 255);
+    assert(um->regs[c] <= 255);
     putchar(um->regs[c]);
     // move program counter
     ++(um->prog_count);    
@@ -142,7 +142,7 @@ void input(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
     um->regs[c] = getchar();
-    assert(um->regs[c] < 255 || um->regs[c] == (umword)EOF);
+    assert(um->regs[c] <= 255 || um->regs[c] == (umword)EOF);
     // move program counter
     ++(um->prog_count);    
 }
