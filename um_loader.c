@@ -15,18 +15,22 @@ static inline void endian_switch(uint8_t *buf, unsigned len) {
     }
 }
 
-// given a file pointer return an Array_T of instruction words
+// given a file pointer return an Array_T of instruction words,
+// user will have to free Array_T
 Array_T loader(FILE *fp) {
     assert(fp);
+    // initialize instruction array
     Array_T instruct = Array_new(0, sizeof(umword));
     size_t size = Array_size(instruct);
     int len = Array_length(instruct);
     uint8_t buf[size];
     umword *elem = NULL;
     int i = 0;
+    // keep reading file, until there is not enough bytes yet for an umword
     while (fread(buf, 1, size, fp) == size) {
         // Array needs to be resized
         if (i == len) {
+            // C++ vector growth algorithm
             if (len != 0) {
                 len *= 2;
             } else {
@@ -34,6 +38,7 @@ Array_T loader(FILE *fp) {
             }
             Array_resize(instruct, len);
         }
+        // put buf into instruct
         elem = (umword *)Array_get(instruct, i++);
         assert(sizeof(*elem) == size);
         endian_switch(buf, size);

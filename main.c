@@ -9,11 +9,10 @@ int main(int argc, char *argv[]) {
     assert(instream);
     // load program
     Array_T instruct = loader(instream);
-    // cleanup file pointer
     fclose(instream);
     // init um
     UM_T um = UM_init(instruct);
-    // run um, it cleans up itself 😊 
+    // run um, it cleans up itself and the loaded program 😊
     UM_run(um);
     return 0;
 }

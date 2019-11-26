@@ -14,9 +14,9 @@ extern umword a_three(umword word);
 extern umword b_three(umword word);
 // takes word, a three register instruction, and extracts register c
 extern umword c_three(umword word);
-// takes word, other instruction , and extracts register a
+// takes word, an ther instruction, and extracts register a
 extern umword a_other(umword word);
-// takes word, other instruction , and extracts value
+// takes word, an other instruction, and extracts value
 extern umword val_other(umword word);
 
 

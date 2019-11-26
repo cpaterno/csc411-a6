@@ -12,14 +12,17 @@ enum instruction {
     OUT, IN, LOAD_PROG, LOAD_VAL
 };
 
-// initialize a UM with a program
+// initialize a UM with a loaded program, prog is freed when UM is freed
 UM_T UM_init(Array_T prog) {
     assert(prog);
     UM_T um;
     // Calloc all parts of the struct
     NEW0(um);
+    // initialize segment sequence
     um->memory.mem = Seq_new(0);
+    // add loaded program
     Seq_addhi(um->memory.mem, prog);
+    // initialize stack of hole indexes
     um->memory.hole_idxs = Stack_new();
     return um;
 }
@@ -113,6 +116,7 @@ void UM_free(UM_T *ump) {
     // alias for the UM's stack
     Stack_T h = (*ump)->memory.hole_idxs;
     void *idx = NULL;
+    // free all indexes in the stack
     while (!Stack_empty(h)) {
         idx = Stack_pop(h);
         FREE(idx);

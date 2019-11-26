@@ -104,8 +104,8 @@ void nand(UM_T um, umword a, umword b, umword c) {
     ++(um->prog_count);    
 }
 
-// map a new segment of memory with equal to whats in register c and store
-// the segment ID in register b
+// map a new segment of memory with size equal to whats in register c 
+// and store the segment ID in register b
 void map(UM_T um, umword b, umword c) {
     assert(um);
     ok_reg(b);
@@ -137,7 +137,7 @@ void output(UM_T um, umword c) {
     ++(um->prog_count);    
 }
 
-// input a character to register c
+// input a character, using the IO device, to register c
 void input(UM_T um, umword c) {
     assert(um);
     ok_reg(c);
@@ -155,13 +155,16 @@ void load_prog(UM_T um, umword b, umword c) {
     ok_reg(b);
     ok_reg(c);
     if (um->regs[b]) {
+        // free currently loaded program
         Array_T prog = (Array_T)Seq_get(um->memory.mem, 0);
         Array_free(&prog);
+        // get new program to load into segment 0
         Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
         // Array_copy handles 10th Fail State: 
         // Loading an unmapped segment as a program
         Seq_put(um->memory.mem, 0, Array_copy(seg, Array_length(seg)));
     }
+    // move the program counter
     um->prog_count = um->regs[c];
 }
 
