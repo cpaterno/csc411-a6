@@ -6,6 +6,19 @@
 #include "seq.h"
 #include "stack.h"
 
+/* INVARIANTS
+ * 
+ * Segments are represented by an Array_T
+ * A segment is unmapped if the pointer representing the Array_T is NULL
+ * A segment is mapped if the pointer representing the Array_T is not NULL
+ *
+ * Holes in the segmented memory are represented by a Stack_T
+ * An empty Stack_T represents a segmented memory without any holes.
+ * If the stack is not empty, each heap allocated integer in the stack
+ * represents the index of the segmented memory which has 
+ * its Segment represented as NULL.
+*/
+
 // The first secret is that each umword is actually a uint32_t
 #define umword uint32_t
 // The second shared secret is that there are 8 registers
