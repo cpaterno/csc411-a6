@@ -17,37 +17,31 @@ static inline uint64_t getu(uint64_t word, unsigned width, unsigned lsb) {
 
 // takes word and extracts opcode
 umword opcode(umword word) {
-    //return Bitpack_getu(word, OP_WIDTH, OP_LSB);
     return getu(word, OP_WIDTH, OP_LSB);
 }
 
 // takes word, a three register instruction, and extracts register a
 umword a_three(umword word) {
-    //return Bitpack_getu(word, REG_WIDTH, A_3_LSB);
     return getu(word, REG_WIDTH, A_3_LSB);
 }
 
 // takes word, a three register instruction, and extracts register b
 umword b_three(umword word) {
-    //return Bitpack_getu(word, REG_WIDTH, B_3_LSB);
     return getu(word, REG_WIDTH, B_3_LSB);
 }
 
 // takes word, a three register instruction, and extracts register c
 umword c_three(umword word) {
-    //return Bitpack_getu(word, REG_WIDTH, C_3_LSB);
     return getu(word, REG_WIDTH, C_3_LSB);
 }
 
 // takes word, an other instruction, and extracts register a
 umword a_other(umword word) {
-    //return Bitpack_getu(word, REG_WIDTH, A_OTHER_LSB);
     return getu(word, REG_WIDTH, A_OTHER_LSB);
 }
 
 // takes word, an other instruction, and extracts value
 umword val_other(umword word) {
-    //return Bitpack_getu(word, VAL_WIDTH, VAL_LSB);
     return getu(word, VAL_WIDTH, VAL_LSB);
 }
 

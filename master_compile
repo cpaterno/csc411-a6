@@ -1,6 +1,6 @@
 #!/bin/sh
-./compile0
+#./compile0
 ./compile1
 ./compile2
-./compile3
-./compileF
+#./compile3
+#./compileF
