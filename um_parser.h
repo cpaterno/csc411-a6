@@ -3,7 +3,7 @@
 
 // This module exports six functions which extract
 // the important parts from an um instruction
-#include "bitpack.h"
+//#include "bitpack.h"
 #include "um_rep.h"
 
 // takes word and extracts opcode
