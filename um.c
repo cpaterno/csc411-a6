@@ -24,6 +24,8 @@ UM_T UM_init(Array_T prog) {
     Seq_addhi(um->memory.mem, prog);
     // initialize stack of hole indexes
     um->memory.hole_idxs = Stack_new();
+    // current program
+    um->prog = prog;
     return um;
 }
 
@@ -31,15 +33,12 @@ UM_T UM_init(Array_T prog) {
 void UM_run(UM_T um) {
     umword *instp = 0;
     umword op = 0;
-    Array_T prog = NULL; 
     // run the machine
     while (1) {
-        // load program's segment
-        prog = (Array_T)Seq_get(um->memory.mem, 0);
         // get current word
         // Array_get handles the 1st Fail State: 
         // Program Count out of bounds of $m[0]
-        instp = (umword *)Array_get(prog, um->prog_count);
+        instp = (umword *)Array_get(um->prog, um->prog_count);
         // get opcode
         op = opcode(*instp);
         // parse opcode

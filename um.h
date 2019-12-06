@@ -2,7 +2,6 @@
 #define __UM__
 
 // This module exports 3 functions which manage the Universal Machine
-#include "array.h"
 #include "um_rep.h"
 
 // initialize a UM with a loaded program, prog is freed when UM is freed

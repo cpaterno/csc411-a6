@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "mem.h"
 #include "assert.h"
-#include "array.h"
 #include "um_mem.h"
 
 // allocate a new segment with size and return the new segment's ID

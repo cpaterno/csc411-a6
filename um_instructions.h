@@ -7,9 +7,7 @@
 // All functions in this module modify the UM by reference
 #include <stdio.h>
 #include "assert.h"
-#include "array.h"
 #include "um_rep.h"
-#include "um_instructions.h"
 #include "um_mem.h"
 
 // make sure reg index is in bounds
@@ -170,9 +168,11 @@ static inline void load_prog(UM_T um, umword b, umword c) {
         Array_free(&prog);
         // get new program to load into segment 0
         Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
-        // Array_copy handles 10th Fail State: 
+        // Array_copy handles 10th Fail State:
+        Array_T new_prog = Array_copy(seg, Array_length(seg));
         // Loading an unmapped segment as a program
-        Seq_put(um->memory.mem, 0, Array_copy(seg, Array_length(seg)));
+        Seq_put(um->memory.mem, 0, new_prog);
+        um->prog = new_prog;
     }
     // move the program counter
     um->prog_count = um->regs[c];

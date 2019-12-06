@@ -3,6 +3,7 @@
 
 // This module exports all the shared secrets that each UM module needs
 #include <stdint.h>
+#include "array.h"
 #include "seq.h"
 #include "stack.h"
 
@@ -49,5 +50,7 @@ typedef struct UM_T {
     umword prog_count;
     // um segemented memory
     struct SegMem_T memory;
+    // copy of prog pointer for locality
+    Array_T prog;
 } *UM_T;
 #endif
