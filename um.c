@@ -14,7 +14,7 @@ enum instruction {
 
 // initialize a UM with a loaded program, prog is freed when UM is freed
 UM_T UM_init(umword *prog) {
-    assert(prog);
+    //assert(prog);
     UM_T um;
     // Calloc all parts of the struct
     NEW0(um);
@@ -99,7 +99,7 @@ void UM_run(UM_T um) {
 
 // cleanup the UM's resources
 void UM_free(UM_T *ump) {
-    assert(ump && *ump);
+    //assert(ump && *ump);
     // alias for the UM's sequence
     Seq_T s = (*ump)->memory.mem;
     // free all segments in the sequence

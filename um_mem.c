@@ -5,7 +5,7 @@
 
 // allocate a new segment with size and return the new segment's ID
 umword allocate(SegMem_T pool, umword size) {
-    assert(pool);
+    //assert(pool);
     // Handle 12th Fail State: Resource Exhaustion aka maximum number
     // of segments is 2^(num bits in umword) - 1, if this is true
     // then we can allocate memory
@@ -28,7 +28,7 @@ umword allocate(SegMem_T pool, umword size) {
 
 // deallocate a segment, at id
 void deallocate(SegMem_T pool, umword id) {
-    assert(pool);
+    //assert(pool);
     umword *seg = (umword *)Seq_get(pool->mem, id);
     // 8th Fail State: 
     // attempting to unmap a segment which is not mapped

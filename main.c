@@ -6,8 +6,7 @@ int main(int argc, char *argv[]) {
     // one command line argument only
     assert(argc == 2);
     FILE *instream = fopen(argv[1], "rb");
-    assert(instream);
-    // load program
+    // load program, checks to see if file is open
     umword *instruct = loader(instream);
     fclose(instream);
     // init um
