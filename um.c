@@ -33,6 +33,7 @@ UM_T UM_init(umword *prog) {
 void UM_run(UM_T um) {
     umword *instp = 0;
     umword op = 0;
+    umword inst = 0;
     // run the machine
     while (1) {
         // get current word
@@ -40,32 +41,33 @@ void UM_run(UM_T um) {
         // Program Count out of bounds of $m[0]
         instp = arr_at(um->prog, um->prog_count);
         // get opcode
-        op = opcode(*instp);
+        inst = *instp;
+        op = opcode(inst);
         // parse opcode
         switch (op) {
             case CMOV:
-                cmov(um, a_three(*instp), b_three(*instp), c_three(*instp));
+                cmov(um, a_three(inst), b_three(inst), c_three(inst));
                 break;
             case SEG_LOAD:
-                seg_load(um, a_three(*instp), 
-                         b_three(*instp), c_three(*instp));
+                seg_load(um, a_three(inst), 
+                         b_three(inst), c_three(inst));
                 break;
             case SEG_STORE:
-                seg_store(um, a_three(*instp), 
-                          b_three(*instp), c_three(*instp));
+                seg_store(um, a_three(inst), 
+                          b_three(inst), c_three(inst));
                 break;
             case ADD:
-                add(um, a_three(*instp), b_three(*instp), c_three(*instp));
+                add(um, a_three(inst), b_three(inst), c_three(inst));
                 break;
             case MUL:
-                multiply(um, a_three(*instp), 
-                         b_three(*instp), c_three(*instp));
+                multiply(um, a_three(inst), 
+                         b_three(inst), c_three(inst));
                 break;
             case DIV:
-                divide(um, a_three(*instp), b_three(*instp), c_three(*instp));
+                divide(um, a_three(inst), b_three(inst), c_three(inst));
                 break;
             case NAND:
-                nand(um, a_three(*instp), b_three(*instp), c_three(*instp));
+                nand(um, a_three(inst), b_three(inst), c_three(inst));
                 break;
             // successfully exit the machine
             case HALT:
@@ -73,22 +75,22 @@ void UM_run(UM_T um) {
                 exit(EXIT_SUCCESS);
                 break;
             case MAP:
-                map(um, b_three(*instp), c_three(*instp));
+                map(um, b_three(inst), c_three(inst));
                 break;
             case UNMAP:
-                unmap(um, c_three(*instp));
+                unmap(um, c_three(inst));
                 break;
             case OUT:
-                output(um, c_three(*instp));
+                output(um, c_three(inst));
                 break;
             case IN:
-                input(um, c_three(*instp));
+                input(um, c_three(inst));
                 break;
             case LOAD_PROG:
-                load_prog(um, b_three(*instp), c_three(*instp));
+                load_prog(um, b_three(inst), c_three(inst));
                 break;
             case LOAD_VAL:
-                load_val(um, a_other(*instp), val_other(*instp));
+                load_val(um, a_other(inst), val_other(inst));
                 break;
             // 2nd Fail State: Invalid Instruction (aka invalid opcode)
             default:
