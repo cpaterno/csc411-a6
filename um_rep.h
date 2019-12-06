@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "seq.h"
 #include "stack.h"
+#include "arr.h"
 
 /* INVARIANTS
  * 
@@ -49,5 +50,7 @@ typedef struct UM_T {
     umword prog_count;
     // um segemented memory
     struct SegMem_T memory;
+    // copy of prog pointer for locality
+    umword *prog;
 } *UM_T;
 #endif
