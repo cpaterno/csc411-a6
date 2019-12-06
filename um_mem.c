@@ -20,9 +20,7 @@ umword allocate(SegMem_T pool, umword size) {
     // holes case
     } else {
         // allocate new segment at the latest hole index
-        umword *idxp = Stack_pop(pool->hole_idxs);
-        idx = *idxp;
-        FREE(idxp);
+        idx = (uintptr_t)Stack_pop(pool->hole_idxs);
         Seq_put(pool->mem, idx, arr_new(size)); 
     }
     return idx;
@@ -40,8 +38,5 @@ void deallocate(SegMem_T pool, umword id) {
     // into the Seq at id
     Seq_put(pool->mem, id, NULL);
     // add hole index to the stack
-    umword *idxp;
-    NEW(idxp);
-    *idxp = id;
-    Stack_push(pool->hole_idxs, idxp);
+    Stack_push(pool->hole_idxs, (void *)(uintptr_t)id);
 }

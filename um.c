@@ -104,22 +104,14 @@ void UM_free(UM_T *ump) {
     Seq_T s = (*ump)->memory.mem;
     // free all segments in the sequence
     umword *e = NULL;
-    for (int i = 0; i < Seq_length(s); ++i) {
+    for (int i = Seq_length(s) - 1; i--; ) {
         e = (umword *)Seq_get(s, i);
         arr_free(e);
     }
     // free the sequence itself
     Seq_free(&s);
-    // alias for the UM's stack
-    Stack_T h = (*ump)->memory.hole_idxs;
-    void *idx = NULL;
-    // free all indexes in the stack
-    while (!Stack_empty(h)) {
-        idx = Stack_pop(h);
-        FREE(idx);
-    }
     // free the stack itself
-    Stack_free(&h);
+    Stack_free(&((*ump)->memory.hole_idxs));
     // free the UM struct
     FREE(*ump);
 }
