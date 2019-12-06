@@ -12,14 +12,14 @@
 // allocate a new segment with size and return the new segment's ID
 static inline umword allocate(SegMem_T pool, umword size) {
     //assert(pool);
-    // Handle 12th Fail State: Resource Exhaustion aka maximum number
-    // of segments is 2^(num bits in umword) - 1, if this is true
-    // then we can allocate memory
-    // Must be a checked run-time error 
-    assert((umword)Seq_length(pool->mem) < (umword)-1);
     umword idx = 0;
     // no holes case
     if (Stack_empty(pool->hole_idxs)) {
+        // Handle 12th Fail State: Resource Exhaustion aka maximum number
+        // of segments is 2^(num bits in umword) - 1, if this is true
+        // then we can allocate memory
+        // Must be a checked run-time error 
+        assert((umword)Seq_length(pool->mem) < (umword)-1);
         // allocate new segment at the end
         idx = Seq_length(pool->mem);
         Seq_addhi(pool->mem, arr_new(size));
