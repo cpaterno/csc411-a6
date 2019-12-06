@@ -1,5 +1,5 @@
-#ifndef __DYN_ARRAYS_H__
-#define __DYN_ARRAYS_H__
+#ifndef __ARR_H__
+#define __ARR_H__
 
 // Length stored in first array element, therefore 
 // allocated space is length + 1
