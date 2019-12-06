@@ -38,9 +38,9 @@ static inline void seg_load(UM_T um, umword a, umword b, umword c) {
     ok_reg(c);
     // Array_get handles the 5th Fail State: SegLoad accesses something 
     // out of bounds of the memory pool or out of bounds of the segment 
-    Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
+    umword *seg = (umword *)Seq_get(um->memory.mem, um->regs[b]);
     // Array_get also handles the 3rd Fail State: SegLoad refers to unmapped (NULL)
-    umword *e = (umword *)Array_get(seg, um->regs[c]);
+    umword *e = arr_at(seg, um->regs[c]);
     um->regs[a] = *e;
     // move program counter
     ++(um->prog_count);    
@@ -55,9 +55,9 @@ static inline void seg_store(UM_T um, umword a, umword b, umword c) {
     ok_reg(c);
     // Array_get handles the 6th Fail State: SegStore accesses something 
     // out of bounds of the memory pool or out of bounds of the segment 
-    Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[a]);
+    umword *seg = (umword *)Seq_get(um->memory.mem, um->regs[a]);
     // Array_get handles the 4th Fail State: SegStore refers to unmapped (NULL)
-    umword *e = (umword *)Array_get(seg, um->regs[b]);
+    umword *e = arr_at(seg, um->regs[b]);
     *e = um->regs[c];
     // move program counter
     ++(um->prog_count);    
@@ -164,13 +164,12 @@ static inline void load_prog(UM_T um, umword b, umword c) {
     ok_reg(c);
     if (um->regs[b]) {
         // free currently loaded program
-        Array_T prog = (Array_T)Seq_get(um->memory.mem, 0);
-        Array_free(&prog);
+        arr_free((umword *)Seq_get(um->memory.mem, 0));
         // get new program to load into segment 0
-        Array_T seg = (Array_T)Seq_get(um->memory.mem, um->regs[b]);
-        // Array_copy handles 10th Fail State:
-        Array_T new_prog = Array_copy(seg, Array_length(seg));
+        umword *seg = (umword *)Seq_get(um->memory.mem, um->regs[b]);
+        // arr_len handles 10th Fail State:
         // Loading an unmapped segment as a program
+        umword *new_prog = arr_clone(seg, arr_len(seg));
         Seq_put(um->memory.mem, 0, new_prog);
         um->prog = new_prog;
     }

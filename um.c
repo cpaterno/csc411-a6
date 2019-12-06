@@ -13,7 +13,7 @@ enum instruction {
 };
 
 // initialize a UM with a loaded program, prog is freed when UM is freed
-UM_T UM_init(Array_T prog) {
+UM_T UM_init(umword *prog) {
     assert(prog);
     UM_T um;
     // Calloc all parts of the struct
@@ -38,7 +38,7 @@ void UM_run(UM_T um) {
         // get current word
         // Array_get handles the 1st Fail State: 
         // Program Count out of bounds of $m[0]
-        instp = (umword *)Array_get(um->prog, um->prog_count);
+        instp = arr_at(um->prog, um->prog_count);
         // get opcode
         op = opcode(*instp);
         // parse opcode
@@ -103,12 +103,10 @@ void UM_free(UM_T *ump) {
     // alias for the UM's sequence
     Seq_T s = (*ump)->memory.mem;
     // free all segments in the sequence
-    Array_T e = NULL;
+    umword *e = NULL;
     for (int i = 0; i < Seq_length(s); ++i) {
-        e = (Array_T)Seq_get(s, i);
-        if (e) {
-            Array_free(&e);
-        }
+        e = (umword *)Seq_get(s, i);
+        arr_free(e);
     }
     // free the sequence itself
     Seq_free(&s);

@@ -16,14 +16,14 @@ umword allocate(SegMem_T pool, umword size) {
     if (Stack_empty(pool->hole_idxs)) {
         // allocate new segment at the end
         idx = Seq_length(pool->mem);
-        Seq_addhi(pool->mem, Array_new(size, sizeof(umword)));
+        Seq_addhi(pool->mem, arr_new(size));
     // holes case
     } else {
         // allocate new segment at the latest hole index
         umword *idxp = Stack_pop(pool->hole_idxs);
         idx = *idxp;
         FREE(idxp);
-        Seq_put(pool->mem, idx, Array_new(size, sizeof(umword))); 
+        Seq_put(pool->mem, idx, arr_new(size)); 
     }
     return idx;
 }
@@ -31,10 +31,11 @@ umword allocate(SegMem_T pool, umword size) {
 // deallocate a segment, at id
 void deallocate(SegMem_T pool, umword id) {
     assert(pool);
-    Array_T seg = (Array_T)Seq_get(pool->mem, id);
-    // Array_free handles 8th Fail State: 
+    umword *seg = (umword *)Seq_get(pool->mem, id);
+    // 8th Fail State: 
     // attempting to unmap a segment which is not mapped
-    Array_free(&seg);
+    assert(seg);
+    arr_free(seg);
     // put NULL, our representation of an unmapped segment,
     // into the Seq at id
     Seq_put(pool->mem, id, NULL);

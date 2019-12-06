@@ -5,7 +5,7 @@
 #include "um_rep.h"
 
 // initialize a UM with a loaded program, prog is freed when UM is freed
-extern UM_T UM_init(Array_T prog);
+extern UM_T UM_init(umword *prog);
 // run an intialized Universal machine, this function also calls UM_free
 extern void UM_run(UM_T um);
 // cleanup the UM's resources

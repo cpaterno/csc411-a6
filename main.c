@@ -10,20 +10,9 @@ int main(int argc, char *argv[]) {
     // load program
     umword *instruct = loader(instream);
     fclose(instream);
-    FILE *fp = fopen("out.test", "wb");
-    umword *e = NULL;
-    for (unsigned i = 0; i < arr_len(instruct); ++i) {
-        e = arr_at(instruct, i);
-        *e = __builtin_bswap32(*e);
-        fwrite(e, 1, sizeof(umword), fp);
-    }
-    arr_free(instruct);
-    fclose(fp);
-    /*
     // init um
     UM_T um = UM_init(instruct);
     // run um, it cleans up itself and the loaded program 😊
     UM_run(um);
-    */
     return 0;
 }
