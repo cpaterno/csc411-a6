@@ -35,7 +35,6 @@ done
 # using one case statement per executable binary
 case $link in
     all|umf) $CC $FLAGS $LFLAGS -o umf main.o \
-	                um_loader.o um.o um_mem.o \
                     $LIBS
               linked=yes ;;
 esac
