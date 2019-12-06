@@ -8,11 +8,13 @@ int main(int argc, char *argv[]) {
     FILE *instream = fopen(argv[1], "rb");
     assert(instream);
     // load program
-    Array_T instruct = loader(instream);
+    umword *instruct = loader(instream);
     fclose(instream);
+    /*
     // init um
     UM_T um = UM_init(instruct);
     // run um, it cleans up itself and the loaded program 😊
     UM_run(um);
+    */
     return 0;
 }
