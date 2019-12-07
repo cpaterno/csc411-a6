@@ -14,7 +14,7 @@ static inline umword allocate(SegMem_T pool, umword size) {
     //assert(pool);
     umword idx = 0;
     // no holes case
-    if (Stack_empty(pool->hole_idxs)) {
+    if (st_empty(pool->hole_idxs)) {
         // Handle 12th Fail State: Resource Exhaustion aka maximum number
         // of segments is 2^(num bits in umword) - 1, if this is true
         // then we can allocate memory
@@ -26,7 +26,7 @@ static inline umword allocate(SegMem_T pool, umword size) {
     // holes case
     } else {
         // allocate new segment at the latest hole index
-        idx = (uintptr_t)Stack_pop(pool->hole_idxs);
+        idx = st_pop(pool->hole_idxs);
         sq_put(pool->mem, idx, arr_new(size)); 
     }
     return idx;
@@ -44,6 +44,6 @@ static inline void deallocate(SegMem_T pool, umword id) {
     // into the Seq at id
     sq_put(pool->mem, id, NULL);
     // add hole index to the stack
-    Stack_push(pool->hole_idxs, (void *)(uintptr_t)id);
+    st_push(pool->hole_idxs, id);
 }
 #endif

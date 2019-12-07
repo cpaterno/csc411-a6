@@ -7,8 +7,8 @@
 #include "assert.h"
 
 typedef struct Node {
-    uint32_t data;
     struct Node *next;
+    uint32_t data;
 } *Node;
 
 typedef struct ST {

@@ -29,7 +29,7 @@ static inline UM_T UM_init(umword *prog) {
     // add loaded program
     sq_append(um->memory.mem, prog);
     // initialize stack of hole indexes
-    um->memory.hole_idxs = Stack_new();
+    um->memory.hole_idxs = st_new();
     // current program
     um->prog = prog;
     return um;
@@ -119,7 +119,7 @@ static inline void UM_free(UM_T *ump) {
     // free the sequence itself
     sq_free(s);
     // free the stack itself
-    Stack_free(&((*ump)->memory.hole_idxs));
+    st_free((*ump)->memory.hole_idxs);
     // free the UM struct
     FREE(*ump);
 }
