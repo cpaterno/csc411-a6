@@ -1,9 +1,10 @@
-#ifndef __DYN_ARRAYS_H__
-#define __DYN_ARRAYS_H__
+#ifndef __ARR_H__
+#define __ARR_H__
 
 // Length stored in first array element, therefore 
 // allocated space is length + 1
 #include <stdint.h>
+#include <string.h>
 #include "mem.h"
 #include "assert.h"
 
@@ -32,9 +33,7 @@ static inline uint32_t *arr_clone(uint32_t *arr, uint32_t len) {
     // side effect of asserting arr
     uint32_t old_len = arr_len(arr);
     uint32_t cpy_len = (old_len < len) ? old_len : len;
-    for (uint32_t i = 1; i <= cpy_len; ++i) {
-        new_arr[i] = arr[i];
-    }
+    memcpy(new_arr + 1, arr + 1, cpy_len * sizeof(uint32_t));
     return new_arr;
 }
 #endif

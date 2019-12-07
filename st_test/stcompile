@@ -21,13 +21,13 @@ LFLAGS="-L/usr/local/cii/lib -L/usr/local/lib -L/csc/411/lib"
 FLAGS="-no-pie -g -O1 -Wall -Wextra -Werror -Wfatal-errors -std=c99 -pedantic"
 
 # compile each argument to a .o file
-$CC $FLAGS $CFLAGS -c arr_test.c
+$CC $FLAGS $CFLAGS -c st_test.c
 
 ########### the middle part is different for each assignment
 # link together .o files + libraries to make executable binaries
 # using one case statement per executable binary
 case $link in
-    all|arr) $CC $FLAGS $LFLAGS -o arr arr_test.o \
+    all|st) $CC $FLAGS $LFLAGS -o st st_test.o \
                     $LIBS
               linked=yes ;;
 esac
