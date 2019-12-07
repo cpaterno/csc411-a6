@@ -44,13 +44,13 @@ typedef struct SegMem_T {
 // This data structure is exported as a pointer 
 // to follow Hanson's interface style
 typedef struct UM_T {
-    // array of registers
-    umword regs[NUM_REGS];
-    // index of current instruction
-    umword prog_count;
     // um segemented memory
     struct SegMem_T memory;
+    // array of registers
+    umword regs[NUM_REGS];
     // copy of prog pointer for locality
     umword *prog;
+    // index of current instruction
+    umword prog_count;
 } *UM_T;
 #endif
