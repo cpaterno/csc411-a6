@@ -112,7 +112,7 @@ static inline void UM_free(UM_T *ump) {
     Seq_T s = (*ump)->memory.mem;
     // free all segments in the sequence
     umword *e = NULL;
-    for (int i = Seq_length(s) - 1; i--; ) {
+    for (int i = Seq_length(s); i--; ) {
         e = (umword *)Seq_get(s, i);
         arr_free(e);
     }
