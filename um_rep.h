@@ -3,8 +3,8 @@
 
 // This module exports all the shared secrets that each UM module needs
 #include <stdint.h>
-#include "seq.h"
 #include "stack.h"
+#include "sq.h"
 #include "arr.h"
 
 /* INVARIANTS
@@ -32,7 +32,7 @@
 typedef struct SegMem_T {
     // sequence of memory segments, segments are Array_Ts
     // therefore they need to be freed
-    Seq_T mem;
+    SQ mem;
     // indices of the holes in the sequence,
     // Hanson's stack is a boxed ADT, therefore the elements 
     // of the stack need to be freed

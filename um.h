@@ -25,9 +25,9 @@ static inline UM_T UM_init(umword *prog) {
     // Calloc all parts of the struct
     NEW0(um);
     // initialize segment sequence
-    um->memory.mem = Seq_new(0);
+    um->memory.mem = sq_new(0);
     // add loaded program
-    Seq_addhi(um->memory.mem, prog);
+    sq_append(um->memory.mem, prog);
     // initialize stack of hole indexes
     um->memory.hole_idxs = Stack_new();
     // current program
@@ -109,15 +109,15 @@ static inline void UM_run(UM_T um) {
 static inline void UM_free(UM_T *ump) {
     //assert(ump && *ump);
     // alias for the UM's sequence
-    Seq_T s = (*ump)->memory.mem;
+    SQ s = (*ump)->memory.mem;
     // free all segments in the sequence
     umword *e = NULL;
-    for (int i = Seq_length(s); i--; ) {
-        e = (umword *)Seq_get(s, i);
+    for (int i = sq_len(s); i--; ) {
+        e = sq_get(s, i);
         arr_free(e);
     }
     // free the sequence itself
-    Seq_free(&s);
+    sq_free(s);
     // free the stack itself
     Stack_free(&((*ump)->memory.hole_idxs));
     // free the UM struct

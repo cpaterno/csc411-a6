@@ -42,7 +42,7 @@ static inline void seg_load(UM_T um, umword a, umword b, umword c) {
     */
     // Array_get handles the 5th Fail State: SegLoad accesses something 
     // out of bounds of the memory pool or out of bounds of the segment 
-    umword *seg = (umword *)Seq_get(um->memory.mem, um->regs[b]);
+    umword *seg = sq_get(um->memory.mem, um->regs[b]);
     // Array_get also handles the 3rd Fail State: SegLoad refers to unmapped (NULL)
     umword *e = arr_at(seg, um->regs[c]);
     um->regs[a] = *e;
@@ -61,7 +61,7 @@ static inline void seg_store(UM_T um, umword a, umword b, umword c) {
     */
     // Array_get handles the 6th Fail State: SegStore accesses something 
     // out of bounds of the memory pool or out of bounds of the segment 
-    umword *seg = (umword *)Seq_get(um->memory.mem, um->regs[a]);
+    umword *seg = sq_get(um->memory.mem, um->regs[a]);
     // Array_get handles the 4th Fail State: SegStore refers to unmapped (NULL)
     umword *e = arr_at(seg, um->regs[b]);
     *e = um->regs[c];
@@ -188,13 +188,13 @@ static inline void load_prog(UM_T um, umword b, umword c) {
     */
     if (um->regs[b]) {
         // free currently loaded program
-        arr_free((umword *)Seq_get(um->memory.mem, 0));
+        arr_free(sq_get(um->memory.mem, 0));
         // get new program to load into segment 0
-        umword *seg = (umword *)Seq_get(um->memory.mem, um->regs[b]);
+        umword *seg = sq_get(um->memory.mem, um->regs[b]);
         // arr_len handles 10th Fail State:
         // Loading an unmapped segment as a program
         umword *new_prog = arr_clone(seg, arr_len(seg));
-        Seq_put(um->memory.mem, 0, new_prog);
+        sq_put(um->memory.mem, 0, new_prog);
         um->prog = new_prog;
     }
     // move the program counter
