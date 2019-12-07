@@ -41,10 +41,16 @@ static inline uint32_t sq_cap(SQ sq) {
     return sq->cap;
 }
 
-static inline void *sq_at(SQ sq, uint32_t i) {
+static inline void *sq_get(SQ sq, uint32_t i) {
     // side effect of asserting sq
     assert(i < sq_len(sq));
     return sq->seq[i];
+}
+
+static inline void sq_put(SQ sq, uint32_t i, void *e) {
+    // side effect of asserting sq
+    assert(i < sq_len(sq));
+    sq->seq[i] = e;
 }
 
 static inline void sq_append(SQ sq, void *e) {
