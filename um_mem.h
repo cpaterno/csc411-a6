@@ -11,7 +11,6 @@
 
 // allocate a new segment with size and return the new segment's ID
 static inline umword allocate(SegMem_T pool, umword size) {
-    //assert(pool);
     umword idx = 0;
     // no holes case
     if (st_empty(pool->hole_idxs)) {
@@ -34,7 +33,6 @@ static inline umword allocate(SegMem_T pool, umword size) {
 
 // deallocate a segment, at id
 static inline void deallocate(SegMem_T pool, umword id) {
-    //assert(pool);
     umword *seg = sq_get(pool->mem, id);
     // 8th Fail State: 
     // attempting to unmap a segment which is not mapped

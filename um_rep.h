@@ -9,12 +9,12 @@
 
 /* INVARIANTS
  * 
- * Segments are represented by an Array_T
- * A segment is unmapped if the pointer representing the Array_T is NULL
- * A segment is mapped if the pointer representing the Array_T is not NULL
+ * Segments are represented by a custom data structure, arr
+ * A segment is unmapped if the pointer representing the arr is NULL
+ * A segment is mapped if the pointer representing the arr is not NULL
  *
- * Holes in the segmented memory are represented by a Stack_T
- * An empty Stack_T represents a segmented memory without any holes.
+ * Holes in the segmented memory are represented by a ST (my Stack)
+ * An empty ST represents a segmented memory without any holes.
  * If the stack is not empty, each heap allocated integer in the stack
  * represents the index of the segmented memory which has 
  * its Segment represented as NULL.
@@ -30,12 +30,10 @@
 // This data structure is exported as a pointer 
 // to follow Hanson's interface style
 typedef struct SegMem_T {
-    // sequence of memory segments, segments are Array_Ts
+    // sequence of memory segments, segments are arr
     // therefore they need to be freed
     SQ mem;
-    // indices of the holes in the sequence,
-    // Hanson's stack is a boxed ADT, therefore the elements 
-    // of the stack need to be freed
+    // indices of the holes in the sequence
     ST hole_idxs;
 } *SegMem_T;
 

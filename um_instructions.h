@@ -10,20 +10,9 @@
 #include "um_rep.h"
 #include "um_mem.h"
 
-// make sure reg index is in bounds
-/*static inline void ok_reg(umword r) {
-    assert(r < NUM_REGS);
-}*/
-
 // conditional move overwrites register a with the value in register b if
 // the value in register c is not 0
 static inline void cmov(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
     if (um->regs[c]) {
         um->regs[a] = um->regs[b];
     }
@@ -34,16 +23,10 @@ static inline void cmov(UM_T um, umword a, umword b, umword c) {
 // segmented load overwrites register a with the memory block represented
 // by the values at register b and register c
 static inline void seg_load(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
-    // Array_get handles the 5th Fail State: SegLoad accesses something 
+    // arr_at handles the 5th Fail State: SegLoad accesses something 
     // out of bounds of the memory pool or out of bounds of the segment 
     umword *seg = sq_get(um->memory.mem, um->regs[b]);
-    // Array_get also handles the 3rd Fail State: SegLoad refers to unmapped (NULL)
+    // arr_at also handles the 3rd Fail State: SegLoad refers to unmapped (NULL)
     umword *e = arr_at(seg, um->regs[c]);
     um->regs[a] = *e;
     // move program counter
@@ -53,16 +36,10 @@ static inline void seg_load(UM_T um, umword a, umword b, umword c) {
 // segmented store overwrites the memory block  represented by the values
 // at register a and register b with the value in register c
 static inline void seg_store(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
-    // Array_get handles the 6th Fail State: SegStore accesses something 
+    // arr_at handles the 6th Fail State: SegStore accesses something 
     // out of bounds of the memory pool or out of bounds of the segment 
     umword *seg = sq_get(um->memory.mem, um->regs[a]);
-    // Array_get handles the 4th Fail State: SegStore refers to unmapped (NULL)
+    // arr_at handles the 4th Fail State: SegStore refers to unmapped (NULL)
     umword *e = arr_at(seg, um->regs[b]);
     *e = um->regs[c];
     // move program counter
@@ -71,12 +48,6 @@ static inline void seg_store(UM_T um, umword a, umword b, umword c) {
 
 // add the values in register b and c, put the result in register a
 static inline void add(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
     um->regs[a] = (um->regs[b] + um->regs[c]);
     // move program counter
     ++(um->prog_count);    
@@ -84,12 +55,6 @@ static inline void add(UM_T um, umword a, umword b, umword c) {
 
 // multiply the values in register b and c, put the result in register a
 static inline void multiply(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
     um->regs[a] = (um->regs[b] * um->regs[c]);
     // move program counter
     ++(um->prog_count);    
@@ -97,12 +62,6 @@ static inline void multiply(UM_T um, umword a, umword b, umword c) {
 
 // divide the values in register b and c, put the result in register a
 static inline void divide(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
     // Handle 9th Fail State: Division by 0
     assert(um->regs[c]);
     um->regs[a] = (um->regs[b] / um->regs[c]);
@@ -113,12 +72,6 @@ static inline void divide(UM_T um, umword a, umword b, umword c) {
 // bitwise not and on the values in register b and c,
 // put the result in register a
 static inline void nand(UM_T um, umword a, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(a);
-    ok_reg(b);
-    ok_reg(c);
-    */
     um->regs[a] = ~((um->regs[b]) & (um->regs[c]));
     // move program counter
     ++(um->prog_count);    
@@ -127,11 +80,6 @@ static inline void nand(UM_T um, umword a, umword b, umword c) {
 // map a new segment of memory with size equal to whats in register c 
 // and store the segment ID in register b
 static inline void map(UM_T um, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(b);
-    ok_reg(c);
-    */
     um->regs[b] = allocate(&(um->memory), um->regs[c]);
     // move program counter
     ++(um->prog_count);    
@@ -139,10 +87,6 @@ static inline void map(UM_T um, umword b, umword c) {
 
 // unmap a segment of memory with its segment ID in register c
 static inline void unmap(UM_T um, umword c) {
-    /*
-    assert(um);
-    ok_reg(c);
-    */
     // 7th Fail State: Can't unmap segment 0
     assert(um->regs[c]);
     deallocate(&(um->memory), um->regs[c]);
@@ -152,10 +96,6 @@ static inline void unmap(UM_T um, umword c) {
 
 // output a character to the IO device, based on the value of register c
 static inline void output(UM_T um, umword c) {
-    /*
-    assert(um);
-    ok_reg(c);
-    */
     // Handle 11th Fail State: Print invalid character
     // Valid characters are [0, 255]
     assert(um->regs[c] <= UINT8_MAX);
@@ -166,10 +106,6 @@ static inline void output(UM_T um, umword c) {
 
 // input a character, using the IO device, to register c
 static inline void input(UM_T um, umword c) {
-    /*
-    assert(um);
-    ok_reg(c);
-    */
     um->regs[c] = getchar();
     // char is between [0, 255] or EOF
     assert(um->regs[c] <= UINT8_MAX || um->regs[c] == (umword)EOF);
@@ -181,11 +117,6 @@ static inline void input(UM_T um, umword c) {
 // represented by the value of register b, if that value is 0 then
 // this is a jump
 static inline void load_prog(UM_T um, umword b, umword c) {
-    /*
-    assert(um);
-    ok_reg(b);
-    ok_reg(c);
-    */
     if (um->regs[b]) {
         // free currently loaded program
         arr_free(sq_get(um->memory.mem, 0));
@@ -203,10 +134,6 @@ static inline void load_prog(UM_T um, umword b, umword c) {
 
 // overwrite the value in register a with value
 static inline void load_val(UM_T um, umword a, umword val) {
-    /*
-    assert(um);
-    ok_reg(a);
-    */
     um->regs[a] = val;
     // move program counter
     ++(um->prog_count);    

@@ -43,7 +43,7 @@ static inline void UM_run(UM_T um) {
     // run the machine
     while (1) {
         // get current word
-        // Array_get handles the 1st Fail State: 
+        // arr_at handles the 1st Fail State: 
         // Program Count out of bounds of $m[0]
         instp = arr_at(um->prog, um->prog_count);
         // get opcode
@@ -107,7 +107,6 @@ static inline void UM_run(UM_T um) {
 
 // cleanup the UM's resources
 static inline void UM_free(UM_T *ump) {
-    //assert(ump && *ump);
     // alias for the UM's sequence
     SQ s = (*ump)->memory.mem;
     // free all segments in the sequence
