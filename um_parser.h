@@ -16,6 +16,7 @@
 #define VAL_LSB 0
 #define WSIZE 64
 
+// Inlined version of getu from Bitpack
 static inline uint64_t getu(uint64_t word, unsigned width, unsigned lsb) {
     return ((word << (WSIZE - (width + lsb))) >> (WSIZE - width));
 }

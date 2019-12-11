@@ -8,8 +8,8 @@
 #include "um_rep.h"
 #include "arr.h" 
 
-// given a file pointer return an Array_T of instruction words,
-// user will have to free Array_T
+// given a file pointer return an umword *, which is an arr 
+// of instruction words, user will have to free arr
 static inline umword *loader(FILE *fp) {
     assert(fp);
     size_t size = sizeof(umword);
