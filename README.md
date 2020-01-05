@@ -3,7 +3,7 @@ Implementing a Universal Machine (simple Virtual Machine)
 
 This assignment was based on a problem found in the [ICFP programming contest 2006](http://fileformats.archiveteam.org/wiki/Universal_Machine_(ICFP_programming_contest_2006)).  
 
-This repo also represents our work improving our Universal Machine using a profiler using Valgrind's Callgrind.  
+This repo also represents our work improving our Universal Machine using a profiler. We used Valgrind's Callgrind.  
 The steps we used to improve the Universal Machine are as follows (more details in labnotes.pdf): 
 
 1. Compile with optimization (01 and 02)
@@ -11,7 +11,7 @@ The steps we used to improve the Universal Machine are as follows (more details 
 3. Inline parser and instructions modules
 4. Removed repetitive pointer dereference  
 5. Only load the program segment when needed
-6. Replaced Hanson Array's with our specialized arrays
+6. Replaced Hanson arrays with our specialized arrays
 7. Use uintptr to get around mallocing/freeing in Hanson's stack
 8. Removed needless asserts
 9. Every module is inlined, removed more repeated pointer dereferences
